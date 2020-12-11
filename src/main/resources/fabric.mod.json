@@ -1,23 +1,18 @@
 {
   "schemaVersion": 1,
-  "id": "ItemView",
+  "id": "itemview-api",
   "version": "${version}",
-  "name": "ItemView",
-  "description": "ItemStack abstractions",
+  "name": "ItemViewApi",
+  "description": "ItemStack and CompoundTag abstractions",
   "authors": [
     "HalfOf2"
   ],
   "contact": {
     "sources": "https://github.com/Astrarre/ItemView"
   },
-  "license": "CC0-1.0",
+  "license": "MPL-2.0",
   "icon": "assets/ItemView/icon.png",
   "environment": "*",
-  "entrypoints": {
-    "main": [
-      "net.devtech.itemview.ItemView"
-    ]
-  },
   "mixins": [
     "ItemView.mixins.json"
   ],

@@ -1,8 +1,8 @@
 package io.github.astrarre.itemview.internal.mixin.nbt;
 
-import io.github.astrarre.itemview.platform.fabric.ItemViews;
+import io.github.astrarre.itemview.platform.fabric.FabricItemViews;
 import io.github.astrarre.itemview.v0.api.nbt.NBTagView;
-import io.github.astrarre.itemview.v0.api.nbt.NbtType;
+import io.github.astrarre.itemview.v0.api.nbt.NBTType;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,7 +17,7 @@ public abstract class CompoundTagMixin implements NBTagView {
 
 	@Override
 	public byte getByte(String path, byte def) {
-		AbstractNumberTag tag = this.itemview_getTag(path, NbtType.BYTE);
+		AbstractNumberTag tag = this.itemview_getTag(path, NBTType.BYTE);
 		if(tag != null) {
 			return tag.getByte();
 		}
@@ -26,7 +26,7 @@ public abstract class CompoundTagMixin implements NBTagView {
 
 	@Override
 	public boolean getBool(String path, boolean def) {
-		AbstractNumberTag tag = this.itemview_getTag(path, NbtType.BOOL);
+		AbstractNumberTag tag = this.itemview_getTag(path, NBTType.BOOL);
 		if(tag != null) {
 			return tag.getByte() != 0;
 		}
@@ -35,7 +35,7 @@ public abstract class CompoundTagMixin implements NBTagView {
 
 	@Override
 	public short getShort(String path, short def) {
-		AbstractNumberTag tag = this.itemview_getTag(path, NbtType.SHORT);
+		AbstractNumberTag tag = this.itemview_getTag(path, NBTType.SHORT);
 		if(tag != null) {
 			return tag.getShort();
 		}
@@ -44,7 +44,7 @@ public abstract class CompoundTagMixin implements NBTagView {
 
 	@Override
 	public char getChar(String path, char def) {
-		AbstractNumberTag tag = this.itemview_getTag(path, NbtType.CHAR);
+		AbstractNumberTag tag = this.itemview_getTag(path, NBTType.CHAR);
 		if(tag != null) {
 			return (char) tag.getShort();
 		}
@@ -53,7 +53,7 @@ public abstract class CompoundTagMixin implements NBTagView {
 
 	@Override
 	public int getInt(String path, int def) {
-		AbstractNumberTag tag = this.itemview_getTag(path, NbtType.INT);
+		AbstractNumberTag tag = this.itemview_getTag(path, NBTType.INT);
 		if(tag != null) {
 			return tag.getInt();
 		}
@@ -62,7 +62,7 @@ public abstract class CompoundTagMixin implements NBTagView {
 
 	@Override
 	public float getFloat(String path, float def) {
-		AbstractNumberTag tag = this.itemview_getTag(path, NbtType.FLOAT);
+		AbstractNumberTag tag = this.itemview_getTag(path, NBTType.FLOAT);
 		if(tag != null) {
 			return tag.getFloat();
 		}
@@ -71,7 +71,7 @@ public abstract class CompoundTagMixin implements NBTagView {
 
 	@Override
 	public long getLong(String path, long def) {
-		AbstractNumberTag tag = this.itemview_getTag(path, NbtType.LONG);
+		AbstractNumberTag tag = this.itemview_getTag(path, NBTType.LONG);
 		if(tag != null) {
 			return tag.getLong();
 		}
@@ -80,7 +80,7 @@ public abstract class CompoundTagMixin implements NBTagView {
 
 	@Override
 	public double getDouble(String path, double def) {
-		AbstractNumberTag tag = this.itemview_getTag(path, NbtType.DOUBLE);
+		AbstractNumberTag tag = this.itemview_getTag(path, NBTType.DOUBLE);
 		if(tag != null) {
 			return tag.getDouble();
 		}
@@ -89,7 +89,7 @@ public abstract class CompoundTagMixin implements NBTagView {
 
 	@Override
 	public Number getNumber(String path, Number def) {
-		AbstractNumberTag tag = this.itemview_getTag(path, NbtType.DOUBLE);
+		AbstractNumberTag tag = this.itemview_getTag(path, NBTType.DOUBLE);
 		if(tag != null) {
 			return tag.getNumber();
 		}
@@ -97,7 +97,7 @@ public abstract class CompoundTagMixin implements NBTagView {
 	}
 
 	@Nullable
-	private AbstractNumberTag itemview_getTag(String path, NbtType<?> type) {
+	private AbstractNumberTag itemview_getTag(String path, NBTType<?> type) {
 		Tag tag = this.shadow$get(path);
 		if(tag != null && tag.getType() == type.getInternalType() && tag instanceof AbstractNumberTag) {
 			return ((AbstractNumberTag)tag);
@@ -108,7 +108,7 @@ public abstract class CompoundTagMixin implements NBTagView {
 	@Override
 	public String getString(String path, String def) {
 		Tag tag = this.shadow$get(path);
-		if(tag != null && tag.getType() == NbtType.STRING.getInternalType()) {
+		if(tag != null && tag.getType() == NBTType.STRING.getInternalType()) {
 			return tag.asString();
 		}
 		return def;
@@ -116,11 +116,19 @@ public abstract class CompoundTagMixin implements NBTagView {
 
 	@Override
 	public Object get(String key) {
-		return ItemViews.view(this.shadow$get(key), NbtType.ANY);
+		return FabricItemViews.view(this.shadow$get(key), NBTType.ANY);
 	}
 
 	@Override
-	public <T> T get(String path, NbtType<T> type, T def) {
-		return null;
+	public <T> T get(String path, NBTType<T> type, T def) {
+		Tag tag = this.shadow$get(path);
+		if(tag == null) {
+			return def;
+		}
+		try {
+			return FabricItemViews.view(tag, type);
+		} catch (ClassCastException e) {
+			return def;
+		}
 	}
 }

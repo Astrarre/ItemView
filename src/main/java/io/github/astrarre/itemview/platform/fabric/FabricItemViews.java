@@ -5,11 +5,12 @@ import java.util.List;
 import io.github.astrarre.itemview.internal.access.AbstractListTagAccess;
 import io.github.astrarre.itemview.v0.api.item.ItemView;
 import io.github.astrarre.itemview.v0.api.nbt.NBTagView;
-import io.github.astrarre.itemview.v0.api.nbt.NbtType;
+import io.github.astrarre.itemview.v0.api.nbt.NBTType;
 import it.unimi.dsi.fastutil.bytes.ByteList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.longs.LongList;
 
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.AbstractNumberTag;
 import net.minecraft.nbt.ByteArrayTag;
@@ -24,7 +25,23 @@ import net.minecraft.nbt.Tag;
  * A utility class for fabric mods
  */
 @SuppressWarnings ("ConstantConditions")
-public class ItemViews {
+public class FabricItemViews {
+	// todo change to immutable when possible
+
+	/**
+	 * @return create an immutable itemstack of an item (amount = 1)
+	 */
+	public static ItemView create(ItemConvertible item) {
+		return create(item, 1);
+	}
+
+	/**
+	 * @return creates an immutable itemstack of the item and it's amount
+	 */
+	public static ItemView create(ItemConvertible item, int amount) {
+		return view(new ItemStack(item, amount));
+	}
+
 	/**
 	 * @return an unmodifiable ItemStack view
 	 */
@@ -33,9 +50,29 @@ public class ItemViews {
 	}
 
 	/**
+	 * @return read and create a new immutable ItemView from a tag
+	 */
+	public static ItemView fromTag(NBTagView view) {
+		return view(ItemStack.fromTag(fromUnsafe(view)));
+	}
+
+	/**
+	 * @see #from(NBTagView)
+	 * @deprecated unsafe
+	 */
+	@Deprecated
+	public static CompoundTag fromUnsafe(NBTagView view) {
+		// todo check for ImmutableCompoundTag when that is implemented
+		return (CompoundTag) view;
+	}
+
+	/**
 	 * @return an immutable ItemStack view
 	 */
 	public static ItemView immutableView(ItemStack stack) {
+		if (stack == null) {
+			return ItemView.EMPTY;
+		}
 		return view(stack.copy());
 	}
 
@@ -46,7 +83,6 @@ public class ItemViews {
 		return view(from(view));
 	}
 
-
 	/**
 	 * @return copy an ItemView to an ItemStack
 	 */
@@ -55,10 +91,13 @@ public class ItemViews {
 	}
 
 	/**
-	 * @return an unmodifiable compound tag view
+	 * @see #from(ItemView)
+	 * @deprecated unsafe
 	 */
-	public static NBTagView view(CompoundTag tag) {
-		return (NBTagView) tag;
+	@Deprecated
+	public static ItemStack fromUnsafe(ItemView view) {
+		// todo check for ImmutableItemStack when that is implemented
+		return (ItemStack) (Object) view;
 	}
 
 	/**
@@ -73,44 +112,31 @@ public class ItemViews {
 	}
 
 	/**
+	 * @return an unmodifiable compound tag view
+	 */
+	public static NBTagView view(CompoundTag tag) {
+		return (NBTagView) tag;
+	}
+
+	/**
 	 * @return the NBTagView converted to a compound tag
 	 */
 	public static CompoundTag from(NBTagView view) {
 		return fromUnsafe(view).copy();
 	}
 
-	/**
-	 * @deprecated unsafe
-	 * @see #from(NBTagView)
-	 */
-	@Deprecated
-	public static CompoundTag fromUnsafe(NBTagView view) {
-		// todo check for ImmutableCompoundTag when that is implemented
-		return (CompoundTag) view;
-	}
-
-	/**
-	 * @deprecated unsafe
-	 * @see #from(ItemView)
-	 */
-	@Deprecated
-	public static ItemStack fromUnsafe(ItemView view) {
-		// todo check for ImmutableItemStack when that is implemented
-		return (ItemStack) (Object) view;
-	}
-
-	public static <T> T immutableView(Tag tag, NbtType<T> type) {
+	public static <T> T immutableView(Tag tag, NBTType<T> type) {
 		return view(tag.copy(), type);
 	}
 
 	@SuppressWarnings ("unchecked")
-	public static <T> T view(Tag tag, NbtType<T> type) {
+	public static <T> T view(Tag tag, NBTType<T> type) {
 		Object ret = null;
 		if (tag instanceof AbstractNumberTag) {
 			Number number = ((AbstractNumberTag) tag).getNumber();
-			if (type == NbtType.BOOL) {
+			if (type == NBTType.BOOL) {
 				ret = number.byteValue() != 0;
-			} else if (type == NbtType.CHAR) {
+			} else if (type == NBTType.CHAR) {
 				ret = (char) number.shortValue();
 			} else {
 				ret = number;
@@ -131,15 +157,17 @@ public class ItemViews {
 		if (type.getClassType().isInstance(ret)) {
 			return (T) ret;
 		} else {
-			throw new IllegalArgumentException(tag.getClass() + " != " + type.getClassType());
+			throw new ClassCastException(tag.getClass() + " != " + type.getClassType());
 		}
 	}
 
-	public static <T> List<T> immutableView(ListTag tag, NbtType<T> componentType) {
+	// todo from methods
+
+	public static <T> List<T> immutableView(ListTag tag, NBTType<T> componentType) {
 		return view(tag.copy(), componentType);
 	}
 
-	public static <T> List<T> view(ListTag tags, NbtType<T> componentType) {
+	public static <T> List<T> view(ListTag tags, NBTType<T> componentType) {
 		return (List<T>) ((AbstractListTagAccess) tags).itemview_getListTag(componentType);
 	}
 
@@ -148,7 +176,7 @@ public class ItemViews {
 	}
 
 	public static ByteList view(ByteArrayTag tags) {
-		return (ByteList) ((AbstractListTagAccess) tags).itemview_getListTag(NbtType.BYTE_ARRAY);
+		return (ByteList) ((AbstractListTagAccess) tags).itemview_getListTag(NBTType.BYTE_ARRAY);
 	}
 
 	public static IntList immutableView(IntArrayTag tag) {
@@ -156,7 +184,7 @@ public class ItemViews {
 	}
 
 	public static IntList view(IntArrayTag tags) {
-		return (IntList) ((AbstractListTagAccess) tags).itemview_getListTag(NbtType.INT_ARRAY);
+		return (IntList) ((AbstractListTagAccess) tags).itemview_getListTag(NBTType.INT_ARRAY);
 	}
 
 	public static LongList immutableView(LongArrayTag tag) {
@@ -164,6 +192,6 @@ public class ItemViews {
 	}
 
 	public static LongList view(LongArrayTag tags) {
-		return (LongList) ((AbstractListTagAccess) tags).itemview_getListTag(NbtType.LONG_ARRAY);
+		return (LongList) ((AbstractListTagAccess) tags).itemview_getListTag(NBTType.LONG_ARRAY);
 	}
 }

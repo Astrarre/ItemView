@@ -3,14 +3,16 @@ package io.github.astrarre.itemview.v0.api.nbt;
 import java.util.Collections;
 import java.util.List;
 
-import io.github.astrarre.itemview.platform.fabric.ItemViews;
+import io.github.astrarre.itemview.platform.fabric.FabricItemViews;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * an unmodifiable view of an nbt tag, the underlying object is not guaranteed to be immutable and may change.
- * @see ItemViews
+ * @see FabricItemViews
  */
 public interface NBTagView {
+	// todo view all keys
+
 	/**
 	 * equivalent to
 	 * <code>
@@ -193,7 +195,18 @@ public interface NBTagView {
 	 * @return unmodifiable equivalent to the vanilla method of getList
 	 */
 	default List<Object> getList(String path) {
-		return this.get(path, NbtType.ANY_LIST, Collections.EMPTY_LIST);
+		return this.get(path, NBTType.ANY_LIST, Collections.EMPTY_LIST);
+	}
+
+	/**
+	 * equivalent to
+	 * <code>
+	 *     view.get(path, type, null)
+	 * </code>
+	 */
+	@Nullable
+	default <T> T get(String path, NBTType<T> type) {
+		return this.get(path, type, null);
 	}
 
 	/**
@@ -201,5 +214,5 @@ public interface NBTagView {
 	 * @param type the type of object to find
 	 * @param def the default value to return
 	 */
-	<T> T get(String path, NbtType<T> type, T def);
+	<T> T get(String path, NBTType<T> type, T def);
 }

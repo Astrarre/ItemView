@@ -2,7 +2,7 @@ package io.github.astrarre.itemview.internal.nbt.list;
 
 import java.util.Arrays;
 
-import io.github.astrarre.itemview.platform.fabric.ItemViews;
+import io.github.astrarre.itemview.platform.fabric.FabricItemViews;
 import it.unimi.dsi.fastutil.longs.AbstractLongList;
 
 import net.minecraft.nbt.LongArrayTag;
@@ -40,7 +40,7 @@ public final class LongArrayView extends AbstractLongList {
 
 	/**
 	 * @deprecated internal
-	 * @see ItemViews#view(LongArrayTag)
+	 * @see FabricItemViews#view(LongArrayTag)
 	 */
 	@Deprecated
 	public static LongArrayView create(LongArrayTag tag) {
