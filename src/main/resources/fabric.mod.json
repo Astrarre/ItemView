@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "ItemView",
+  "version": "${version}",
+  "name": "ItemView",
+  "description": "ItemStack abstractions",
+  "authors": [
+    "HalfOf2"
+  ],
+  "contact": {
+    "sources": "https://github.com/Astrarre/ItemView"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/ItemView/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.devtech.itemview.ItemView"
+    ]
+  },
+  "mixins": [
+    "ItemView.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.10.8",
+    "fabric": "*",
+    "minecraft": "1.16.4"
+  }
+}
