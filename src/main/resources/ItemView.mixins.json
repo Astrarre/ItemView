@@ -1,10 +1,13 @@
 {
   "required": true,
-  "package": "net.devtech.itemview.mixin",
+  "package": "io.github.astrarre.itemview.internal.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-  ],
-  "client": [
+    "nbt.CompoundTagMixin",
+    "nbt.list.ByteArrayTagMixin",
+    "nbt.list.IntArrayTagMixin",
+    "nbt.list.ListTagMixin",
+    "nbt.list.LongArrayTagMixin"
   ],
   "injectors": {
     "defaultRequire": 1
