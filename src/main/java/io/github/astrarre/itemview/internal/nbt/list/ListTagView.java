@@ -2,7 +2,7 @@ package io.github.astrarre.itemview.internal.nbt.list;
 
 import java.util.AbstractList;
 
-import io.github.astrarre.itemview.fabric.FabricTags;
+import io.github.astrarre.itemview.platform.fabric.ItemViews;
 import io.github.astrarre.itemview.v0.api.nbt.NbtType;
 
 import net.minecraft.nbt.ListTag;
@@ -17,7 +17,7 @@ public class ListTagView extends AbstractList<Object> {
 	}
 
 	/**
-	 * @see FabricTags#wrap(ListTag)
+	 * @see ItemViews#view(ListTag, NbtType)
 	 * @deprecated internal
 	 */
 	@Deprecated
@@ -27,7 +27,7 @@ public class ListTagView extends AbstractList<Object> {
 
 	@Override
 	public Object get(int index) {
-		return FabricTags.wrap(this.tag.get(index), this.component);
+		return ItemViews.view(this.tag.get(index), this.component);
 	}
 
 	@Override

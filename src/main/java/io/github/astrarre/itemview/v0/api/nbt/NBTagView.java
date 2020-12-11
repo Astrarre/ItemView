@@ -3,10 +3,12 @@ package io.github.astrarre.itemview.v0.api.nbt;
 import java.util.Collections;
 import java.util.List;
 
+import io.github.astrarre.itemview.platform.fabric.ItemViews;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * an immutable view of an nbt tag, the underlying object is not guaranteed to be immutable and may change.
+ * an unmodifiable view of an nbt tag, the underlying object is not guaranteed to be immutable and may change.
+ * @see ItemViews
  */
 public interface NBTagView {
 	/**

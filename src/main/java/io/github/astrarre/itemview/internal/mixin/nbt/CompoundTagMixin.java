@@ -1,6 +1,6 @@
 package io.github.astrarre.itemview.internal.mixin.nbt;
 
-import io.github.astrarre.itemview.fabric.FabricTags;
+import io.github.astrarre.itemview.platform.fabric.ItemViews;
 import io.github.astrarre.itemview.v0.api.nbt.NBTagView;
 import io.github.astrarre.itemview.v0.api.nbt.NbtType;
 import org.jetbrains.annotations.Nullable;
@@ -116,7 +116,7 @@ public abstract class CompoundTagMixin implements NBTagView {
 
 	@Override
 	public Object get(String key) {
-		return FabricTags.wrap(this.shadow$get(key), NbtType.ANY);
+		return ItemViews.view(this.shadow$get(key), NbtType.ANY);
 	}
 
 	@Override
