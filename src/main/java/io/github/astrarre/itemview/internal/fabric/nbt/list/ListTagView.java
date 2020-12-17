@@ -1,4 +1,4 @@
-package io.github.astrarre.itemview.internal.nbt.list;
+package io.github.astrarre.itemview.internal.fabric.nbt.list;
 
 import java.util.AbstractList;
 

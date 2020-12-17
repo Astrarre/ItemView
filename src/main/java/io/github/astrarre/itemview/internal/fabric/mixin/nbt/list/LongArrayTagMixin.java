@@ -1,7 +1,7 @@
-package io.github.astrarre.itemview.internal.mixin.nbt.list;
+package io.github.astrarre.itemview.internal.fabric.mixin.nbt.list;
 
-import io.github.astrarre.itemview.internal.access.AbstractListTagAccess;
-import io.github.astrarre.itemview.internal.nbt.list.LongArrayView;
+import io.github.astrarre.itemview.internal.fabric.access.AbstractListTagAccess;
+import io.github.astrarre.itemview.internal.fabric.nbt.list.LongArrayView;
 import io.github.astrarre.itemview.v0.api.nbt.NBTType;
 import org.spongepowered.asm.mixin.Mixin;
 

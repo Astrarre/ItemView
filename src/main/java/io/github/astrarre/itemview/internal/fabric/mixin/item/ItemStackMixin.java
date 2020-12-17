@@ -1,6 +1,9 @@
-package io.github.astrarre.itemview.internal.mixin.item;
+package io.github.astrarre.itemview.internal.fabric.mixin.item;
+
+import java.util.Objects;
 
 import io.github.astrarre.itemview.platform.fabric.FabricItemViews;
+import io.github.astrarre.itemview.v0.api.item.ItemKey;
 import io.github.astrarre.itemview.v0.api.item.ItemView;
 import io.github.astrarre.itemview.v0.api.nbt.NBTagView;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +33,7 @@ public abstract class ItemStackMixin {
 	@Shadow public abstract CompoundTag getSubTag(String key);
 	@Shadow @Final @Deprecated private Item item;
 
-	// @formatter:off
+	@Shadow private CompoundTag tag;// @formatter:off
 	@Intrinsic public boolean itemview$isEmpty(){return this.isEmpty();}
 	@Intrinsic public Item itemview$getItem(){return this.getItem();}
 	@Intrinsic public int itemview$getCount(){return this.getCount();}
@@ -38,11 +41,11 @@ public abstract class ItemStackMixin {
 	@Intrinsic public boolean itemview$hasTag(){return this.hasTag();}
 	public NBTagView itemview$toTag(){return FabricItemViews.view(this.toTag(new CompoundTag()));}
 	public ItemView itemview$copy(){return FabricItemViews.immutableView((ItemStack) (Object) this);}
-	public boolean itemview$areTagsEqual(ItemView view){return this.itemview$areTagsEqual(FabricItemViews.fromUnsafe(view));}
+	public boolean itemview$areTagsEqual(ItemKey view){return Objects.equals(this.tag, FabricItemViews.fromUnsafe(view.getTag()));}
 	public boolean itemview$areTagsEqual(ItemStack stack){return areTagsEqual((ItemStack) (Object) this, stack);}
 	public boolean itemview$equals(ItemView view){return this.itemview$equals(FabricItemViews.fromUnsafe(view));}
 	public boolean itemview$equals(ItemStack stack){return this.isEqual(stack);}
-	public boolean itemview$canStackWith(ItemView view){return this.item == view.getItem() && this.itemview$areTagsEqual(view);}
+	public boolean itemview$canStackWith(ItemKey view){return this.item == view.getItem() && this.itemview$areTagsEqual(view);}
 	public boolean itemview$canStackWith(ItemStack stack){return this.itemview$canStackWith(FabricItemViews.view(stack));}
 	public @Nullable NBTagView itemview$getTag(){return FabricItemViews.view(this.getTag());}
 	public @Nullable NBTagView itemview$getSubTag(String key){return FabricItemViews.view(this.getSubTag(key));}

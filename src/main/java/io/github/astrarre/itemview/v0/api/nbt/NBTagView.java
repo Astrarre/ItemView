@@ -191,6 +191,12 @@ public interface NBTagView {
 	@Nullable
 	Object get(String path);
 
+	default NBTagView getTag(String path) {
+		return this.getTag(path, null);
+	}
+
+	NBTagView getTag(String path, NBTagView def);
+
 	/**
 	 * @return unmodifiable equivalent to the vanilla method of getList
 	 */

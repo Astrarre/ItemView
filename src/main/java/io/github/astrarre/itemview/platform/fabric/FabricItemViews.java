@@ -2,7 +2,7 @@ package io.github.astrarre.itemview.platform.fabric;
 
 import java.util.List;
 
-import io.github.astrarre.itemview.internal.access.AbstractListTagAccess;
+import io.github.astrarre.itemview.internal.fabric.access.AbstractListTagAccess;
 import io.github.astrarre.itemview.v0.api.item.ItemView;
 import io.github.astrarre.itemview.v0.api.nbt.NBTagView;
 import io.github.astrarre.itemview.v0.api.nbt.NBTType;

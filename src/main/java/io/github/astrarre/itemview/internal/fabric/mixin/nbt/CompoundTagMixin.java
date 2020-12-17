@@ -1,4 +1,4 @@
-package io.github.astrarre.itemview.internal.mixin.nbt;
+package io.github.astrarre.itemview.internal.fabric.mixin.nbt;
 
 import io.github.astrarre.itemview.platform.fabric.FabricItemViews;
 import io.github.astrarre.itemview.v0.api.nbt.NBTagView;
@@ -14,6 +14,8 @@ import net.minecraft.nbt.Tag;
 @Mixin(CompoundTag.class)
 public abstract class CompoundTagMixin implements NBTagView {
 	@Shadow public abstract @Nullable Tag shadow$get(String key);
+
+	@Shadow public abstract CompoundTag getCompound(String key);
 
 	@Override
 	public byte getByte(String path, byte def) {
@@ -117,6 +119,12 @@ public abstract class CompoundTagMixin implements NBTagView {
 	@Override
 	public Object get(String key) {
 		return FabricItemViews.view(this.shadow$get(key), NBTType.ANY);
+	}
+
+	@Override
+	public NBTagView getTag(String path, NBTagView def) {
+		CompoundTag tag = this.getCompound(path);
+		return tag == null ? null : FabricItemViews.view(tag);
 	}
 
 	@Override

@@ -31,11 +31,11 @@ public final class NBTType<T> {
 	public static final NBTType<IntList> INT_ARRAY = new NBTType<>(IntList.class, 11);
 	public static final NBTType<LongList> LONG_ARRAY = new NBTType<>(LongList.class, 12);
 	// gap
-	public static final NBTType<Number> NUMBER = new NBTType<>(Number.class,99);
+	public static final NBTType<Number> NUMBER = new NBTType<>(Number.class, 99);
 
 	private final Class<T> cls;
-	@Nullable private final NBTType<?> component;
 	private final int type, internalType;
+	@Nullable private final NBTType<?> component;
 
 	private NBTType(Class<T> cls, int type) {
 		this(cls, null, type, type);
@@ -86,13 +86,13 @@ public final class NBTType<T> {
 	@Nullable
 	public NBTType<?> getRootComponent() {
 		NBTType<?> component = this.component;
-		if(component == null) {
+		if (component == null) {
 			return null;
 		}
 
 		while (true) {
 			NBTType type = component.getComponent();
-			if(type == null) {
+			if (type == null) {
 				return component;
 			} else {
 				component = type;

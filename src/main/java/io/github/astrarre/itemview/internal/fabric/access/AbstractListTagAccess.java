@@ -1,4 +1,4 @@
-package io.github.astrarre.itemview.internal.access;
+package io.github.astrarre.itemview.internal.fabric.access;
 
 import io.github.astrarre.itemview.v0.api.nbt.NBTType;
 
